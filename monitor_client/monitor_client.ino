@@ -6,6 +6,7 @@
 #define DHT11PIN 2
 dht11 DHT11;
 GPRS gprs(PIN_TX, PIN_RX, BAUDRATE,"cmnet");
+char target_url[61];
 char buffer[128];
 
 void setup(){
