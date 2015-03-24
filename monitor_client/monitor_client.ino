@@ -5,7 +5,7 @@
 #include "DHT11.h"
 #define DHT11PIN 2
 dht11 DHT11;
-GPRS gprs(PIN_TX, PIN_RX, BAUDRATE,"cmnet");
+GPRS gprs(7, 8, BAUDRATE,"cmnet");
 char target_url[61];
 char buffer[128];
 
@@ -38,7 +38,7 @@ void setup(){
   if(false == gprs.connect(TCP,"monitor.ourjnu.com", 80)) {
       Serial.println("connect error");
   }else{
-      Serial.println("connect mbed.org success");
+      Serial.println("connect monitor.ourjnu.com success");
   }
 
   Serial.println("waiting to fetch...");
