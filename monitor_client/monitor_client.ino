@@ -44,6 +44,7 @@ void setup(){
 }
 
 void loop(){
+    DHT11.read(DHT11PIN);
 /*
     Serial.print("Temperature (oC): ");
     Serial.println((float)DHT11.temperature, 2);
