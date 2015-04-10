@@ -3,12 +3,27 @@
 #include <Wire.h>
 #include "Suli.h"
 
+//I2C Port expander and LCDs
+#include "LiquidCrystal_I2C.h"
+LiquidCrystal_I2C lcd(0x20, 16, 2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+//LCD address can be read in the program I2CScanner
+
+/*
+--- I2C Bus Scanner Test ---
+starting scanning of I2C bus from 1 to 127...
+
+addr: 32     HEX: 0x20   found!
+
+--- I2C Bus Scanner Complete ---
+
+*/
+
 //DHT11
 #include "DHT11.h"
 #define DHT11PIN 2
 dht11 DHT11;
 
-//DSM
+//DSM501A
 int pin = 3;
 unsigned long duration;
 unsigned long starttime;
@@ -21,14 +36,20 @@ float concentration = 0;
 GPRS gprs(7, 8, 9600,"cmnet");
 char buffer[128];
 //Debug in PC
-bool is_debug = true;
+#define is_debug true
 
 void setup(){
 
     Serial.begin(9600);
-    //DSM init
+
+    //initialize DSM501A
     pinMode(3,INPUT);
     starttime = millis();
+
+    //initialize I2C LCD-1602
+    lcd.init();
+    lcd.backlight();
+    //initialize gprs
     if(!is_debug){
         gprs.init();
         // attempt DHCP
@@ -58,11 +79,6 @@ void loop(){
     {
         ratio = lowpulseoccupancy/(sampletime_ms*10.0);  // Integer percentage 0=>100
         concentration = 1.1*pow(ratio,3)-3.8*pow(ratio,2)+520*ratio+0.62; // using spec sheet curve
-        //Serial.print(lowpulseoccupancy);
-        // Serial.print(",");
-        Serial.print(ratio);
-        Serial.print(",");
-        //Serial.println(concentration);
         lowpulseoccupancy = 0;
         starttime = millis();
      
@@ -99,9 +115,22 @@ void loop(){
         //gprs.close();
         //gprs.disconnect();
     }else{
+        //Serial.print(lowpulseoccupancy);
+        // Serial.print(",");
+        Serial.print(ratio);
+        Serial.print(",");
+        //Serial.println(concentration);
         Serial.print((float)DHT11.temperature, 2);
         Serial.print(",");
         Serial.println((float)DHT11.humidity, 2);
+
+        lcd.clear();
+        //lcd.backlight();
+        lcd.print(ratio);
+        lcd.setCursor(8,0);
+        lcd.print((float)DHT11.temperature, 2);
+        lcd.setCursor(0,1);
+        lcd.print((float)DHT11.humidity, 2);
     }
     
     }
