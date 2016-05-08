@@ -83,13 +83,13 @@ void loop(){
         starttime = millis();
      
   
-    //snprintf(http_cmd,sizeof(http_cmd),"GET monitor.ourjnu.com/submit.php?device_index=13726247339&longitude=113.540718&latitude=22.256467&temperature=%03d&humidity=%03d&particulate_matter=25 HTTP/1.0\r\n\r\n",DHT11.temperature,DHT11.humidity);
-    //sprintf(http_cmd,"GET /submit.php?device_index=13726247339&longitude=113.540718&latitude=22.256467&temperature=%03d&humidity=%03d&particulate_matter=25 HTTP/1.0\r\n\r\n",DHT11.temperature,DHT11.humidity);
+    //snprintf(http_cmd,sizeof(http_cmd),"GET monitor.ourjnu.com/submit.php?device_index=13726247339&longitude=113.540718&latitude=22.256467&temperature=%03d&humidity=%03d&particulate_matter=25 HTTP/1.0  \r\n\r\n",DHT11.temperature,DHT11.humidity);
+    //sprintf(http_cmd,"GET /submit.php?device_index=13726247339&longitude=113.540718&latitude=22.256467&temperature=%03d&humidity=%03d&particulate_matter=25 HTTP/1.0  \r\n\r\n",DHT11.temperature,DHT11.humidity);
     //Serial.println(http_cmd);
     if(!is_debug){
         //Use rewrited url to prevent memory overflow
-        char target_url[66];
-        snprintf(target_url, sizeof(target_url), "GET /13726247339-113.540718-22.256467-%03d-%03d-%07.2f HTTP/1.0\r\n\r\n",DHT11.temperature, DHT11.humidity, ratio);
+        char target_url[68];
+        snprintf(target_url, sizeof(target_url), "GET /13726247339-113.540718-22.256467-%03d-%03d-%07.2f HTTP/1.0  \r\n\r\n",DHT11.temperature, DHT11.humidity, ratio);
         Serial.println(target_url);
         
         if(false == gprs.connect(TCP,"monitor.ourjnu.com", 80)) {
